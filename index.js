@@ -12,28 +12,29 @@ const FILE_URL = process.env.FILE_URL;
 const CHAT_SPACE = process.env.CHAT_SPACE;
 const TIMEZONE = process.env.TIMEZONE || "Asia/Bangkok";
 
-async function sendChatMessage(space, message) {
+async function sendChatMessage(message) {
   try {
     await axios.post(
-      `https://chat.googleapis.com/v1/${space}/messages`,
+      process.env.WEBHOOK_URL,
       { text: message },
       { headers: { "Content-Type": "application/json" } }
     );
-    console.log(`✅ Message sent to ${space}: ${message}`);
+    console.log(`✅ Message sent: ${message}`);
   } catch (err) {
     console.error("❌ Failed to send message:", err.response?.data || err.message);
   }
 }
 
-// Run at 9:00 AM GMT+7 (Mon–Fri)
+// run every weekday at 9:15 AM
 cron.schedule(
-  "0 9 * * 1-5",
+  "15 9 * * 1-5", // minute=15, hour=9, Monday–Friday
   async () => {
     const message = `Dear team, please update your daily report on this file ${FILE_URL}`;
-    await sendChatMessage(CHAT_SPACE, message);
+    await sendChatMessage(message);
   },
   { timezone: TIMEZONE }
 );
+
 
 app.get("/", (req, res) => res.send("✅ Daily reminder bot is running"));
 app.listen(10000, () => console.log("🚀 Server started on port 10000"));
