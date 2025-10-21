@@ -19,7 +19,7 @@ jobs:
             echo "ERROR: WEBHOOK_URL not set"
             exit 1
           fi
-          MESSAGE=Dear team, please update your daily report on this file ${FILE_URL}
+          MESSAGE="Dear team, please update your daily report on this file ${FILE_URL}"
           echo "Sending reminder: $MESSAGE"
           curl -sS -X POST "$WEBHOOK_URL" \
             -H "Content-Type: application/json" \
