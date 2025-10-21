@@ -27,7 +27,7 @@ async function sendChatMessage(message) {
 
 // run every weekday at 9:15 AM
 cron.schedule(
-  "15 9 * * 1-5", // minute=15, hour=9, Monday–Friday
+  "30 9 * * 1-5", // minute=15, hour=9, Monday–Friday
   async () => {
     const message = `Dear team, please update your daily report on this file ${FILE_URL}`;
     await sendChatMessage(message);
