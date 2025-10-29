@@ -2,14 +2,19 @@ name: Daily Report Reminder (GMT+7 09:30)
 
 on:
   schedule:
-    # At 02:15 UTC (09:15 GMT+7) every weekday (Monday to Friday)
-    - cron: '15 2 * * 1-5'
-  workflow_dispatch: # allows manual run from Actions UI
+    # Run at 08:30 UTC ≈ 09:30 GMT+7
+    - cron: '30 1 * * 1-5'
+  workflow_dispatch:
 
 jobs:
   send-reminder:
     runs-on: ubuntu-latest
     steps:
+      - name: Log current UTC and local time
+        run: |
+          echo "UTC time: $(date -u)"
+          echo "Local time (GMT+7): $(TZ='Asia/Bangkok' date)"
+
       - name: Send reminder to Google Chat webhook
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
